@@ -13,22 +13,25 @@ IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
 int pin_switch = 16;
+int state = HIGH;      // the current state of the output pin
+int reading;           // the current reading from the input pin
+int previous = LOW;    // the previous reading from the input pin
 
-boolean oldSwitchState = LOW;
-boolean newSwitchState1 = LOW;
-boolean newSwitchState2 = LOW;
-boolean newSwitchState3 = LOW;
+// the follow variables are long's because the time, measured in miliseconds,
+// will quickly become a bigger number than can be stored in an int.
+long times = 0;         // the last time the output pin was toggled
+long debounce = 200;   // the debounce time, increase if the output flickers
 
 int light = 10;                                   // Number of the Hue light to be switched
 
-const char hueHubIP[] = "hubip";       // Hue hub IP
-const char hueUsername[] = "username";  // hue bridge username
+const char hueHubIP[] = "192.168.1.135";       // Hue hub IP
+const char hueUsername[] = "8GVlH915yoo5QtBGFOiSvcIk8HzOWj5DgUPcpVTU";  // hue bridge username
 
 const int hueHubPort = 80;
 
 
-const char ssid[] = "ssid";                      // Network SSID (name)
-const char pass[] = "password";                  // Network password
+const char ssid[] = "tortuga";                      // Network SSID (name)
+const char pass[] = "dos gardenias para ti";                  // Network password
 
 
 
@@ -115,27 +118,37 @@ void loop()
 
   getHue();                                       // Lights 1 status
 
-  newSwitchState1 = digitalRead(pin_switch);
-  delay(1);
-  newSwitchState2 = digitalRead(pin_switch);
-  delay(1);
-  newSwitchState3 = digitalRead(pin_switch);
- 
-  // if all 3 values are the same we can continue
-  if (  (newSwitchState1==newSwitchState2) && (newSwitchState1==newSwitchState3) ) {
-    if ( newSwitchState1 != oldSwitchState ) {
-      // has the button switch been closed?
-      if ( newSwitchState1 == HIGH ) {
-        if (onOffState == true) {
-          String command =  "{\"on\": false}";
-          setHue(command);
-        }
-        else {
+  
+
+
+  reading = digitalRead(pin_switch);
+
+  // if the input just went from LOW and HIGH and we've waited long enough
+  // to ignore any noise on the circuit, toggle the output pin and remember
+  // the time
+  if (reading == HIGH && previous == LOW && millis() - times > debounce) {
+    if (state == HIGH) {
+      state = LOW;
+      if (onOffState == true) {
+        String command =  "{\"on\": false}";
+        setHue(command);
+      } else {
           String command =  "{\"on\": true}";
           setHue(command); 
         }
-      }
-      oldSwitchState = newSwitchState1;
-    }  
+    }
+    else {
+      state = HIGH;
+      if (onOffState == true) {
+        String command =  "{\"on\": false}";
+        setHue(command);
+      } else {
+          String command =  "{\"on\": true}";
+          setHue(command); 
+        }
+      
+    }
+    times = millis();    
   }
+  previous = reading;
 }
