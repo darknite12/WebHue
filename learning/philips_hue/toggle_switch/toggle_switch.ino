@@ -24,14 +24,14 @@ long debounce = 200;   // the debounce time, increase if the output flickers
 
 int light = 10;                                   // Number of the Hue light to be switched
 
-const char hueHubIP[] = "192.168.1.135";       // Hue hub IP
-const char hueUsername[] = "8GVlH915yoo5QtBGFOiSvcIk8HzOWj5DgUPcpVTU";  // hue bridge username
+const char hueHubIP[] = "hue_hub_ip";       // Hue hub IP
+const char hueUsername[] = "hue_username";  // hue bridge username
 
 const int hueHubPort = 80;
 
 
-const char ssid[] = "tortuga";                      // Network SSID (name)
-const char pass[] = "dos gardenias para ti";                  // Network password
+const char ssid[] = "ssid";                      // Network SSID (name)
+const char pass[] = "password";                  // Network password
 
 
 
