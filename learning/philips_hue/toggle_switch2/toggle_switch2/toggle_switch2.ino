@@ -7,8 +7,8 @@ IPAddress ip(192, 168, 1, 1);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-const char ssid[] = "tortuga";                      // Network SSID (name)
-const char pass[] = "dos gardenias para ti";        // Network password
+const char ssid[] = "ssid";                      // Network SSID (name)
+const char pass[] = "ssidpassword";        // Network password
 
 int buttonPin = 16;
 int buttonNew;
@@ -16,7 +16,7 @@ int buttonOld = 1;
 int dt = 100;
 
 const char hueHubIP[] = "192.168.1.135";
-const char hueUsername[] = "8GVlH915yoo5QtBGFOiSvcIk8HzOWj5DgUPcpVTU";
+const char hueUsername[] = "hueUsername";
 const int hueHubPort = 80;
 int light = 10;           // Number of the Hue light to be switched
 
